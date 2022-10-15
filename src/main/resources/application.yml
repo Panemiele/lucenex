@@ -1,0 +1,4 @@
+ingdati:
+  lucene:
+    index:
+      directory: "./index"
