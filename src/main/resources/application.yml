@@ -1,4 +1,7 @@
+server:
+  servlet:
+    context-path: /ing-dati
 ingdati:
   lucene:
     index:
-      directory: "./index"
+      directory: ./index
