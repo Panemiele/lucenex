@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -33,6 +34,17 @@ public class SearchServiceImpl implements SearchService {
     @Override public List<DocumentVO> searchInIndex(String queryString, FieldName fieldName) throws Exception {
         List<DocumentVO> documentVOList;
         Query query = new TermQuery(new Term(fieldName.name(), queryString));
+        try (Directory directory = FSDirectory.open(Paths.get(indexDirectory))) {
+            IndexReader reader = DirectoryReader.open(directory);
+            IndexSearcher searcher = new IndexSearcher(reader);
+            documentVOList = runQuery(searcher, query);
+        }
+        return documentVOList;
+    }
+
+    @Override public List<DocumentVO> searchForPhraseInIndex(List<String> queryTerms, FieldName fieldName) throws Exception {
+        List<DocumentVO> documentVOList;
+        Query query = new PhraseQuery(fieldName.name(), queryTerms.toArray(new String[0]));
         try (Directory directory = FSDirectory.open(Paths.get(indexDirectory))) {
             IndexReader reader = DirectoryReader.open(directory);
             IndexSearcher searcher = new IndexSearcher(reader);

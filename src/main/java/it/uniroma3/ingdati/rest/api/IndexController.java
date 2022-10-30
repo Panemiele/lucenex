@@ -10,7 +10,7 @@ public interface IndexController {
     void createIndex() throws IOException;
 
     @PostMapping("/multiple")
-    void createIndex(@RequestParam(value = "filenames") String[] fileNames) throws IOException;
+    void createIndex(@RequestParam(value = "filenames") String[] fileNames, @RequestParam("open-mode") String openMode) throws IOException;
 
     @DeleteMapping
     void deleteIndexes() throws IOException;

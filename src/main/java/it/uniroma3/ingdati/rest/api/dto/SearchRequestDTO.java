@@ -5,11 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class SearchRequestDTO {
-    String queryString;
+    List<String> queryStrings;
     String fieldName;
 }

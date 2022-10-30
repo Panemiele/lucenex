@@ -25,9 +25,20 @@ public class SearchControllerImpl implements SearchController {
     }
 
     @Override public List<DocumentDTO> searchInIndex(@RequestBody SearchRequestDTO searchRequestDTO) throws Exception {
-        String queryString = searchRequestDTO.getQueryString();
+        String queryString = searchRequestDTO.getQueryStrings().get(0);
         FieldName fieldName = FieldName.TITLE.name().equals(searchRequestDTO.getFieldName()) ? FieldName.TITLE : FieldName.CONTENT;
         List<DocumentVO> documentVOList = searchService.searchInIndex(queryString, fieldName);
+        return Optional.ofNullable(documentVOList)
+            .orElse(new ArrayList<>())
+            .stream()
+            .map(vo -> new DocumentDTO(vo.getId(), vo.getTitle(), vo.getRankWeight()))
+            .collect(Collectors.toList());
+    }
+
+    @Override public List<DocumentDTO> searchForPhraseInIndex(@RequestBody SearchRequestDTO searchRequestDTO) throws Exception {
+        List<String> queryTerms = searchRequestDTO.getQueryStrings();
+        FieldName fieldName = FieldName.TITLE.name().equals(searchRequestDTO.getFieldName()) ? FieldName.TITLE : FieldName.CONTENT;
+        List<DocumentVO> documentVOList = searchService.searchForPhraseInIndex(queryTerms, fieldName);
         return Optional.ofNullable(documentVOList)
             .orElse(new ArrayList<>())
             .stream()

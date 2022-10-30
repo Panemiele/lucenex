@@ -65,10 +65,11 @@ public class IndexServiceImpl implements IndexService {
     }
 
     @Override
-    public void createIndex(String[] fileNames) throws IOException {
+    public void createIndex(String[] fileNames, IndexWriterConfig.OpenMode openMode) throws IOException {
         Directory directory = FSDirectory.open(Paths.get(indexDirectory));
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig(createCustomPerFieldAnalyzerWrapper());
         indexWriterConfig.setCodec(new SimpleTextCodec());
+        indexWriterConfig.setOpenMode(openMode);
         IndexWriter writer = new IndexWriter(directory, indexWriterConfig);
 
         for (String fileName : fileNames) {
@@ -87,7 +88,7 @@ public class IndexServiceImpl implements IndexService {
             while (fileScanner.hasNextLine()) {
                 String nextLine = fileScanner.nextLine();
                 System.out.println("content - " + nextLine);
-                sb.append(nextLine);
+                sb.append(nextLine + System.lineSeparator());
             }
             String content = sb.toString();
             document.add(new TextField("TITLE", title, Field.Store.YES));

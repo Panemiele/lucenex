@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface SearchService {
     List<DocumentVO> searchInIndex(String queryString, FieldName fieldName) throws Exception;
+    List<DocumentVO> searchForPhraseInIndex(List<String> queryTerms, FieldName fieldName) throws Exception;
+
 }
