@@ -93,7 +93,7 @@ public class Homework2Test {
         Long startTimeMillis = System.currentTimeMillis();
         String[] fileNames = new String[]{FIRST_TEST_FILE};
         indexService.createIndex(fileNames, IndexWriterConfig.OpenMode.CREATE);
-        Assert.assertNotNull(FSDirectory.open(Paths.get("./src/test/resources/index2")));
+        Assert.assertNotNull(FSDirectory.open(Paths.get(INDEX_DIRECTORY)));
         Long endTimeMillis = System.currentTimeMillis();
         System.out.println("shouldExecuteAQueryForTitleOnSingleDocumentIndex - index creation time: " + (endTimeMillis - startTimeMillis));
 
