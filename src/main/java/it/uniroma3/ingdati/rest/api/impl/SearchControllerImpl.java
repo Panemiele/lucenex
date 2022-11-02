@@ -1,5 +1,11 @@
 package it.uniroma3.ingdati.rest.api.impl;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.uniroma3.ingdati.rest.api.SearchController;
 import it.uniroma3.ingdati.rest.api.dto.DocumentDTO;
 import it.uniroma3.ingdati.rest.api.dto.SearchRequestDTO;
@@ -16,6 +22,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@Tag(name = "SearchController", description = "Defines methods to execute Lucene queries")
+@Schema(name = "SearchController", description = "Defines methods to execute Lucene queries")
 public class SearchControllerImpl implements SearchController {
 
     private final SearchService searchService;
@@ -24,7 +32,16 @@ public class SearchControllerImpl implements SearchController {
         this.searchService = searchService;
     }
 
-    @Override public List<DocumentDTO> searchInIndex(@RequestBody SearchRequestDTO searchRequestDTO) throws Exception {
+    @Override
+    @Operation(description = "Executes a TermQuery using the Lucene index",
+        responses = {
+            @ApiResponse(
+                responseCode = "200", description = "Document list succesfully retrieved",
+                content = @Content(array = @ArraySchema(schema = @Schema(implementation = DocumentDTO.class)))
+            )
+        }
+    )
+    public List<DocumentDTO> searchInIndex(@RequestBody SearchRequestDTO searchRequestDTO) throws Exception {
         String queryString = searchRequestDTO.getQueryStrings().get(0);
         FieldName fieldName = FieldName.TITLE.name().equals(searchRequestDTO.getFieldName()) ? FieldName.TITLE : FieldName.CONTENT;
         List<DocumentVO> documentVOList = searchService.searchInIndex(queryString, fieldName);
@@ -35,7 +52,16 @@ public class SearchControllerImpl implements SearchController {
             .collect(Collectors.toList());
     }
 
-    @Override public List<DocumentDTO> searchForPhraseInIndex(@RequestBody SearchRequestDTO searchRequestDTO) throws Exception {
+    @Override
+    @Operation(description = "Executes a PhraseQuery using the Lucene index",
+        responses = {
+            @ApiResponse(
+                responseCode = "200", description = "Document list succesfully retrieved",
+                content = @Content(array = @ArraySchema(schema = @Schema(implementation = DocumentDTO.class)))
+            )
+        }
+    )
+    public List<DocumentDTO> searchForPhraseInIndex(@RequestBody SearchRequestDTO searchRequestDTO) throws Exception {
         List<String> queryTerms = searchRequestDTO.getQueryStrings();
         FieldName fieldName = FieldName.TITLE.name().equals(searchRequestDTO.getFieldName()) ? FieldName.TITLE : FieldName.CONTENT;
         List<DocumentVO> documentVOList = searchService.searchForPhraseInIndex(queryTerms, fieldName);

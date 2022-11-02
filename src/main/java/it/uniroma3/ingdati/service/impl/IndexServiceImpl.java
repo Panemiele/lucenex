@@ -80,14 +80,12 @@ public class IndexServiceImpl implements IndexService {
             StringBuilder sb = new StringBuilder();
             if (fileScanner.hasNextLine()) {
                 String nextLine = fileScanner.nextLine();
-                System.out.println("title - " + nextLine);
                 sb.append(nextLine);
             }
             String title = sb.toString();
             sb.delete(0, sb.toString().length());
             while (fileScanner.hasNextLine()) {
                 String nextLine = fileScanner.nextLine();
-                System.out.println("content - " + nextLine);
                 sb.append(nextLine + System.lineSeparator());
             }
             String content = sb.toString();

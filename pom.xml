@@ -22,6 +22,7 @@
         <lucene.version>9.4.0</lucene.version>
         <junit.version>4.13.1</junit.version>
         <java.version>19</java.version>
+        <org.springdoc.version>1.6.12</org.springdoc.version>
     </properties>
 
 
@@ -117,6 +118,12 @@
             <artifactId>lucene-codecs</artifactId>
             <version>${lucene.version}</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${org.springdoc.version}</version>
         </dependency>
 
     </dependencies>

@@ -1,5 +1,9 @@
 package it.uniroma3.ingdati.rest.api.impl;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import it.uniroma3.ingdati.rest.api.IndexController;
 import it.uniroma3.ingdati.service.IndexService;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -8,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 
 @RestController
+@Tag(name = "IndexController", description = "Defines methods for Lucene indexes management")
+@Schema(name = "IndexController", description = "Defines methods for Lucene indexes management")
 public class IndexControllerImpl implements IndexController {
 
     private final IndexService indexService;
@@ -16,20 +22,43 @@ public class IndexControllerImpl implements IndexController {
         this.indexService = indexService;
     }
 
-    // http://localhost:8080/ing-dati/indexes
-    @Override public void createIndex() throws IOException {
+
+    @Override
+    @Operation(description = "Create a default Lucene index",
+        responses = {
+            @ApiResponse(
+                responseCode = "200", description = "Index created succesfully"
+            )
+        }
+    )
+    public void createIndex() throws IOException {
         indexService.createIndex();
     }
 
-    // http://localhost:8080/ing-dati/indexes/multiple?filenames=Come_diventare_un_ingegnere_dei_dati&filenames=Curriculum_Ingegneria_dei_Dati
-    @Override public void createIndex(String[] fileNames, String openModeName) throws IOException {
+
+    @Override
+    @Operation(description = "Create a Lucene index using the input files names",
+        responses = {
+            @ApiResponse(
+                responseCode = "200", description = "Index created succesfully"
+            )
+        }
+    )
+    public void createIndex(String[] fileNames, String openModeName) throws IOException {
         IndexWriterConfig.OpenMode openMode = mapToOpenMode(openModeName);
         indexService.createIndex(fileNames, openMode);
     }
 
 
-    // http://localhost:8080/ing-dati/indexes
-    @Override public void deleteIndexes() throws IOException {
+    @Override
+    @Operation(description = "Deletes all the Lucene indexes",
+        responses = {
+            @ApiResponse(
+                responseCode = "200", description = "Index created succesfully"
+            )
+        }
+    )
+    public void deleteIndexes() throws IOException {
         indexService.deleteIndexes();
     }
 
